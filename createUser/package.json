@@ -1,0 +1,12 @@
+{
+  "name": "createUser",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"No tests yet...\""
+  },
+  "dependencies": {
+    "tedious": "6.6.0"
+  },
+  "devDependencies": {}
+}
