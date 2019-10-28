@@ -6,27 +6,18 @@
             "command": "host start",
             "problemMatcher": "$func-watch",
             "isBackground": true,
-            "dependsOn": "npm install",
-            "options": {
-                "cwd": "${workspaceFolder}/getTweets"
-            }
+            "dependsOn": "npm install"
         },
         {
             "type": "shell",
             "label": "npm install",
-            "command": "npm install",
-            "options": {
-                "cwd": "${workspaceFolder}/getTweets"
-            }
+            "command": "npm install"
         },
         {
             "type": "shell",
             "label": "npm prune",
             "command": "npm prune --production",
-            "problemMatcher": [],
-            "options": {
-                "cwd": "${workspaceFolder}/getTweets"
-            }
+            "problemMatcher": []
         }
     ]
 }

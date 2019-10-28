@@ -1,3 +1,4 @@
+// POST - User
 var Connection = require('tedious').Connection;
 var Request = require('tedious').Request;
 var TYPES = require('tedious').TYPES;
@@ -21,10 +22,16 @@ var config = {
 
 var connection = new Connection(config);
 
-connection.on('connect',function(err)
-{
-    addUser('adf','d');
+connection.on('connect',function(err){
+    if (err) throw err;
+    addUser('Alvins','D');
+    //connection.close();
 })
+
+connection.on('debug', function(text) {
+    console.log(text);
+  }
+);
 
 function addUser(username,password){
     request = new Request("INSERT INTO Users (Username, Passwords) VALUES (@username, @password);", function (err){
@@ -37,4 +44,7 @@ function addUser(username,password){
     request.addParameter('password', TYPES.Char, password);
     connection.execSql(request);
     console.log("done")
+
 }
+
+

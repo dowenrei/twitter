@@ -1,3 +1,4 @@
+CREATE DATABASE Twittert;
 
 CREATE TABLE Users (
   Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -16,32 +17,28 @@ GO
 CREATE TABLE Tweets (
   Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
   UserId INT,
-  Tweet CHAR(500)
+  Tweet CHAR(500),
 );
 
 GO
 
-INSERT INTO Users (Username, Passwords) VALUES
-('Jared', 'Australia'),
-('Nikita', 'India'),
-('Tom', 'Germany');
-GO
 
+/* Create User */
+INSERT INTO Users (Username, Passwords) VALUES ('Jared', 'Australia'),
 
+/*Show Suggested Friends*/
+SELECT Users.Username FROM Users WHERE Username <> 'Jared';
 
-INSERT INTO Tweets (UserID, Tweet) VALUES
-(1, 'Hi'),
-(1, 'India'),
-(1, 'Germany');
-GO
+/* Get Tweets from Username -ORDER BY */
+SELECT Tweets.Tweet FROM Tweets JOIN Users ON Users.Id=Tweets.Id WHERE Tweets.UserId=(SELECT Users.Id FROM Users WHERE Username='Jared') ORDER BY Tweets.Id DESC;
 
+/* Insert Tweets from Username*/
+INSERT INTO Tweets (UserID, Tweet) VALUES ((SELECT Users.Id FROM Users WHERE Username='Jared'), 'helloadf');
 
-INSERT INTO Friends (UserId, FriendId) VALUES
-(1, 2),
-(1, 3);
-GO
+/* Follow Button from Username */
+INSERT INTO Friends (UserId, FriendId) VALUES ((SELECT Users.Id FROM Users WHERE Username='Nikita'), (SELECT Users.Id FROM Users WHERE Username='Tom'))
 
-/* Get Tweets from Id */
-SELECT Tweets.Tweet FROM Tweets JOIN Users ON Users.Id=Tweets.Id WHERE Tweets.UserId=1;
+/* Show Friends List (Username) */
+SELECT Users.Username FROM Users JOIN Friends ON Users.Id=Friends.FriendId WHERE UserId = (SELECT Users.Id FROM Users WHERE Username='Jared');
 
-SELECT * FROM Users;
+/* Show all tweets from friends */
