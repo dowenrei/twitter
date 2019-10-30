@@ -1,3 +1,4 @@
+
 var Connection = require('tedious').Connection;
 var Request = require('tedious').Request;
 var TYPES = require('tedious').TYPES;
@@ -14,35 +15,41 @@ var config = {
     }
 };
 
-var connection = new Connection(config);
+var connection = new Connection(config); 
 connection.on('connect', function (err) {
-    if (err) context.log(err);
+    if (err) {
+        console.log(err);}
     getSuggestedFriends();
 });
 
 connection.on('debug', function (text) {
     console.log(text);
-}
-);
-
+});
 
 function getSuggestedFriends() {
-
-    request = new Request("SELECT Users.Username FROM Users WHERE Username <> 'Jared';", function (err) {
+    var result = [];
+    request = new Request("SELECT Users.Username FROM Users WHERE Username <> 'Jared';", function (err,rowCount) {
         if (err) {
-            console.log(err)
+            console.log(err);
+        }
+        else{
+            console.log(rowCount + ' rows');
         }
     });
-    var result = [];
 
     request.on('row', function (columns) {
-        columns.forEach(function (column) {
-            console.log(column.value);
-            result.push(column.value);
+            console.log(columns);
+            columns.forEach(function (column) {
+                console.log(column.value)
+                result.push(column.value);
+            });
+           
         });
 
-    });
+    request.on('requestCompleted', function () {
+        console.log('End Result',result);
+        connection.close();
+     });
+    
     connection.execSql(request);
 }
-
-

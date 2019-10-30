@@ -7,7 +7,7 @@ module.exports = function (context, req) {
 
     var config = {
         server: 'reitwitter.database.windows.net',  //update me
-        options: { encrypt: true, database: 'Twitter' },
+        options:{encrypt:true, database: 'Twitter'},
         authentication: {
             type: 'default',
             options: {
@@ -15,11 +15,11 @@ module.exports = function (context, req) {
                 password: "Dowenrei!",
             }
         }
-    };
+};
 
     var connection = new Connection(config);
 
-    connection.on('connect', function (err) {
+    connection.on('connect', function(err) {
 
         if (err) {
             context.log(err);
@@ -31,37 +31,40 @@ module.exports = function (context, req) {
             context.done();
 
         } else {
-            addUser('AzureFunction', 'Hi');
+            context.log("Connection Established.")
+            getSuggestedFriends();
         }
     });
 
-    function addUser(username, password) {
-
-        request = new Request("INSERT INTO Users (Username, Passwords) VALUES (@username, @password);", function (err) {
+    function getSuggestedFriends() {
+        var result = [];
+        request = new Request("SELECT Users.Username FROM Users WHERE Username <> 'Jared';", function (err) {
             if (err) {
                 context.log(err);
 
                 context.res = {
-                    status: 500,
-                    body: "Failed to connect to execute statement."
+                    status: 400,
+                    body: `${err}`
                 };
                 context.done();
             }
-            else {
-                context.res = {
-                    status: 200,
-                    body: "User added"
-                }
-            }
         });
+
+        request.on('row', function (columns) {
+                columns.forEach(function (column) {
+                    context.log(column.value);
+                    result.push(column.value);
+                });
+            });
+
+        request.on('requestCompleted', function () {
+                console.log('End Result',result);
+                connection.close();
+                context.res.status =200;
+                context.res.body = result;
+                context.done();
+            });
         
-        // Not executed?
-        request.on('done', function () {
-            context.log('Finish Request')
-            context.done();
-        });
-        request.addParameter('username', TYPES.Char, username);
-        request.addParameter('password', TYPES.Char, password);
         connection.execSql(request);
     }
 };

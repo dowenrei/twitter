@@ -2,8 +2,8 @@ CREATE DATABASE Twittert;
 
 CREATE TABLE Users (
   Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-  Username CHAR(50) UNIQUE,
-  Passwords CHAR(50)
+  Username VARCHAR(50) UNIQUE,
+  Passwords VARCHAR(50)
 );
 GO
 
@@ -17,14 +17,14 @@ GO
 CREATE TABLE Tweets (
   Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
   UserId INT,
-  Tweet CHAR(500),
+  Tweet VARCHAR(500),
 );
 
 GO
 
 
 /* Create User */
-INSERT INTO Users (Username, Passwords) VALUES ('Jared', 'Australia'),
+INSERT INTO Users (Username, Passwords) VALUES ('Jared', 'Australia');
 
 /*Show Suggested Friends*/
 SELECT Users.Username FROM Users WHERE Username <> 'Jared';
