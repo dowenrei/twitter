@@ -22,7 +22,15 @@ CREATE TABLE Tweets (
 
 GO
 
+CREATE TABLE Rr (
+  Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+  UserId INT,
+  FriendId INT
+);
+GO
 
+ALTER TABLE Friends
+ADD CONSTRAINT UQ_UserId_FriendId UNIQUE(UserId, FriendId);
 /* Create User */
 INSERT INTO Users (Username, Passwords) VALUES ('Jared', 'Australia');
 
@@ -39,6 +47,6 @@ INSERT INTO Tweets (UserID, Tweet) VALUES ((SELECT Users.Id FROM Users WHERE Use
 INSERT INTO Friends (UserId, FriendId) VALUES ((SELECT Users.Id FROM Users WHERE Username='Nikita'), (SELECT Users.Id FROM Users WHERE Username='Tom'))
 
 /* Show Friends List (Username) */
-SELECT Users.Username FROM Users JOIN Friends ON Users.Id=Friends.FriendId WHERE UserId = (SELECT Users.Id FROM Users WHERE Username='Jared');
+SELECT Users.Username FROM Users JOIN Friends ON Users.Id=Friends.FriendId WHERE UserId = (SELECT Users.Id FROM Users WHERE Username='Nikita');
 
 /* Show all tweets from friends */

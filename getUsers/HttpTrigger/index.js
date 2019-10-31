@@ -38,7 +38,7 @@ module.exports = function (context, req) {
 
     function getSuggestedFriends() {
         var result = [];
-        request = new Request("SELECT Users.Username FROM Users WHERE Username <> 'Jared';", function (err) {
+        request = new Request("SELECT Users.Username FROM Users WHERE Username <> @username;", function (err) {
             if (err) {
                 context.log(err);
 
@@ -64,6 +64,8 @@ module.exports = function (context, req) {
                 context.res.body = result;
                 context.done();
             });
+        
+        request.addParameter('username', TYPES.VarChar, req.headers.username);
         
         connection.execSql(request);
     }

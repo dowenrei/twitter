@@ -7,7 +7,7 @@ module.exports = function (context, req) {
 
     var config = {
         server: 'reitwitter.database.windows.net',  //update me
-        options: { encrypt: true, database: 'Twitter' },
+        options:{encrypt:true, database: 'Twitter'},
         authentication: {
             type: 'default',
             options: {
@@ -15,11 +15,11 @@ module.exports = function (context, req) {
                 password: "Dowenrei!",
             }
         }
-    };
+};
 
     var connection = new Connection(config);
 
-    connection.on('connect', function (err) {
+    connection.on('connect', function(err) {
 
         if (err) {
             context.log(err);
@@ -32,13 +32,13 @@ module.exports = function (context, req) {
 
         } else {
             context.log("Connection Established.")
-            getTweets();
+            showFriendlist();
         }
     });
 
-    function getTweets() {
+    function showFriendlist() {
         var result = [];
-        request = new Request("SELECT Tweets.Tweet FROM Tweets JOIN Users ON Users.Id=Tweets.Id WHERE Tweets.UserId=(SELECT Users.Id FROM Users WHERE Username=@username) ORDER BY Tweets.Id DESC;", function (err) {
+        request = new Request("SELECT Users.Username FROM Users JOIN Friends ON Users.Id=Friends.FriendId WHERE UserId = (SELECT Users.Id FROM Users WHERE Username=@username);", function (err) {
             if (err) {
                 context.log(err);
 
@@ -51,20 +51,20 @@ module.exports = function (context, req) {
         });
 
         request.on('row', function (columns) {
-            columns.forEach(function (column) {
-                context.log(column.value);
-                result.push(column.value);
+                columns.forEach(function (column) {
+                    context.log(column.value);
+                    result.push(column.value);
+                });
             });
-        });
-        
-        request.on('requestCompleted', function () {
-            console.log('End Result', result);
-            connection.close();
-            context.res.status = 200;
-            context.res.body = result;
-            context.done();
-        });
 
+        request.on('requestCompleted', function () {
+                console.log('End Result',result);
+                connection.close();
+                context.res.status =200;
+                context.res.body = result;
+                context.done();
+            });
+        
         request.addParameter('username', TYPES.VarChar, req.headers.username);
 
         connection.execSql(request);

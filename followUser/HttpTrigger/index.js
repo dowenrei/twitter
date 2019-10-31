@@ -31,42 +31,32 @@ module.exports = function (context, req) {
             context.done();
 
         } else {
-            context.log("Connection Established.")
-            getTweets();
+            if(req.body.name && req.body.friend){
+                addFriend(req.body.name,req.body.friend);
+            }
         }
     });
 
-    function getTweets() {
-        var result = [];
-        request = new Request("SELECT Tweets.Tweet FROM Tweets JOIN Users ON Users.Id=Tweets.Id WHERE Tweets.UserId=(SELECT Users.Id FROM Users WHERE Username=@username) ORDER BY Tweets.Id DESC;", function (err) {
+    function addFriend(username, friend) {
+        context.log(username)
+        request = new Request("INSERT INTO Friends (UserId, FriendId) VALUES ((SELECT Users.Id FROM Users WHERE Username=@username), (SELECT Users.Id FROM Users WHERE Username=@friend))", function (err) {
             if (err) {
                 context.log(err);
 
                 context.res = {
                     status: 400,
-                    body: `${err}`
+                    body: "Bad request, failed to connect to execute statement."
                 };
                 context.done();
             }
+            else {
+                context.res.status = 201;
+                context.res.body = `${username} and ${friend} are friends now.`;
+                context.done();
+            }
         });
-
-        request.on('row', function (columns) {
-            columns.forEach(function (column) {
-                context.log(column.value);
-                result.push(column.value);
-            });
-        });
-        
-        request.on('requestCompleted', function () {
-            console.log('End Result', result);
-            connection.close();
-            context.res.status = 200;
-            context.res.body = result;
-            context.done();
-        });
-
-        request.addParameter('username', TYPES.VarChar, req.headers.username);
-
+        request.addParameter('username', TYPES.VarChar, username);
+        request.addParameter('friend', TYPES.VarChar, friend);
         connection.execSql(request);
     }
 };
