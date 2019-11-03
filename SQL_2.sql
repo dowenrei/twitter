@@ -10,7 +10,8 @@ GO
 CREATE TABLE Friends (
   Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
   UserId INT,
-  FriendId INT
+  FriendId INT,
+  CONSTRAINT UQ_UserId_FriendId UNIQUE(UserId, FriendId)
 );
 GO
 
@@ -22,23 +23,16 @@ CREATE TABLE Tweets (
 
 GO
 
-CREATE TABLE Rr (
-  Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-  UserId INT,
-  FriendId INT
-);
-GO
+SELECT * FROM Users;	
 
-ALTER TABLE Friends
-ADD CONSTRAINT UQ_UserId_FriendId UNIQUE(UserId, FriendId);
 /* Create User */
 INSERT INTO Users (Username, Passwords) VALUES ('Jared', 'Australia');
-
+  
 /*Show Suggested Friends*/
-SELECT Users.Username FROM Users WHERE Username <> 'Jared';
+	SELECT Users.Username FROM Users WHERE Username <> 'Jared';
 
 /* Get Tweets from Username -ORDER BY */
-SELECT Tweets.Tweet FROM Tweets JOIN Users ON Users.Id=Tweets.Id WHERE Tweets.UserId=(SELECT Users.Id FROM Users WHERE Username='Jared') ORDER BY Tweets.Id DESC;
+  SELECT Tweets.Tweet FROM Tweets JOIN Users ON Users.Id=Tweets.Id WHERE Tweets.UserId=(SELECT Users.Id FROM Users WHERE Username='Jared') ORDER BY Tweets.Id DESC;
 
 /* Insert Tweets from Username*/
 INSERT INTO Tweets (UserID, Tweet) VALUES ((SELECT Users.Id FROM Users WHERE Username='Jared'), 'helloadf');
@@ -49,4 +43,5 @@ INSERT INTO Friends (UserId, FriendId) VALUES ((SELECT Users.Id FROM Users WHERE
 /* Show Friends List (Username) */
 SELECT Users.Username FROM Users JOIN Friends ON Users.Id=Friends.FriendId WHERE UserId = (SELECT Users.Id FROM Users WHERE Username='Nikita');
 
-/* Show all tweets from friends */
+/* Show all tweets from users & friends */
+	
