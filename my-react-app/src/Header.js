@@ -12,7 +12,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
+import Timeline from './Timeline';
 import './App.css';
 
 
@@ -23,7 +23,11 @@ export default class Header extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: false
+            open: false,
+            username: "",
+            password: "",
+            usernametoChildComponent:"",
+            passwordtoChildComponent:""
         };
     }
 
@@ -35,6 +39,19 @@ export default class Header extends React.Component {
         this.setState({ open: false });
     };
 
+    login=()=>{
+        this.setState({ open: false });
+        this.setState({ usernametoChildComponent: this.state.username });
+        console.log(this.state.usernametoChildComponent)
+    }
+
+    textInputChanged_username = (event) => {
+        this.setState({ username: event.target.value });
+      }
+    
+    textInputChanged_password = (event) => {
+        this.setState({ password: event.target.value });
+      }
     useStyles = makeStyles(theme => ({
         root: {
             flexGrow: 1
@@ -61,7 +78,7 @@ export default class Header extends React.Component {
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="h6" className={this.useStyles.title}>
-                            News
+                            Tweetit
             </Typography>
                         <Button color="inherit" onClick={this.handleClickOpen} >Login</Button>
                         <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
@@ -77,6 +94,7 @@ export default class Header extends React.Component {
                                     label="username"
                                     type="text"
                                     fullWidth
+                                    onChange={this.textInputChanged_username} value={this.state.username}
                                 />
                                 <TextField
                                     autoFocus
@@ -85,19 +103,21 @@ export default class Header extends React.Component {
                                     label="password"
                                     type="password"
                                     fullWidth
+                                    onChange={this.textInputChanged_password} value={this.state.password}
                                 />
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={this.handleClose} color="primary">
                                     Cancel
           </Button>
-                                <Button onClick={this.handleClose} color="primary">
+                                <Button onClick={this.login} color="primary">
                                     Login
           </Button>
                             </DialogActions>
                         </Dialog>
                     </Toolbar>
                 </AppBar>
+                < Timeline username={this.state.usernametoChildComponent}></Timeline>
             </div>);
     }
 
