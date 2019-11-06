@@ -41,7 +41,12 @@ export default class Header extends React.Component {
             open: false,
             username: "",
             password: "",
+<<<<<<< HEAD
             tweet:[]
+=======
+            usernametoChildComponent:"",
+            passwordtoChildComponent:""
+>>>>>>> 0f77977510804dcc447e05cdec111c795ea04a66
         };
     }
 
@@ -55,7 +60,12 @@ export default class Header extends React.Component {
 
     login=()=>{
         this.setState({ open: false });
+<<<<<<< HEAD
         this.getTweet();
+=======
+        this.setState({ usernametoChildComponent: this.state.username });
+        console.log(this.state.usernametoChildComponent)
+>>>>>>> 0f77977510804dcc447e05cdec111c795ea04a66
     }
 
     textInputChanged_username = (event) => {
@@ -90,7 +100,11 @@ export default class Header extends React.Component {
                         >
                             <MenuIcon />
                         </IconButton>
+<<<<<<< HEAD
                         <Typography variant="h6" className={this.useStyles.title} style={{flex:1}}>
+=======
+                        <Typography variant="h6" className={this.useStyles.title}>
+>>>>>>> 0f77977510804dcc447e05cdec111c795ea04a66
                             Tweetit
             </Typography>
                         <Button color="inherit" onClick={this.handleClickOpen} >Login</Button>
@@ -130,7 +144,11 @@ export default class Header extends React.Component {
                         </Dialog>
                     </Toolbar>
                 </AppBar>
+<<<<<<< HEAD
                 < Timeline tweet={this.state.tweet}></Timeline>
+=======
+                < Timeline username={this.state.usernametoChildComponent}></Timeline>
+>>>>>>> 0f77977510804dcc447e05cdec111c795ea04a66
             </div>);
     }
 
