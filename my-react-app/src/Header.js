@@ -12,18 +12,36 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
+import Timeline from './Timeline';
 import './App.css';
 
 
 
 export default class Header extends React.Component {
     //get put where
+    getTweet= async()=>{
+        console.log("getTweet")
+        const response= await fetch('https://getsuggestedfriends.azurewebsites.net/api/HttpTrigger', {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-type': 'application/json',
+            'username':this.props.username
+          }
+        });
+        const data = await response.json();
+        this.setState({tweet:data})
+        console.log(this.state.tweet)
+      }
+    //create User 
 
     constructor(props) {
         super(props);
         this.state = {
-            open: false
+            open: false,
+            username: "",
+            password: "",
+            tweet:[]
         };
     }
 
@@ -35,6 +53,18 @@ export default class Header extends React.Component {
         this.setState({ open: false });
     };
 
+    login=()=>{
+        this.setState({ open: false });
+        this.getTweet();
+    }
+
+    textInputChanged_username = (event) => {
+        this.setState({ username: event.target.value });
+      }
+    
+    textInputChanged_password = (event) => {
+        this.setState({ password: event.target.value });
+      }
     useStyles = makeStyles(theme => ({
         root: {
             flexGrow: 1
@@ -60,8 +90,8 @@ export default class Header extends React.Component {
                         >
                             <MenuIcon />
                         </IconButton>
-                        <Typography variant="h6" className={this.useStyles.title}>
-                            News
+                        <Typography variant="h6" className={this.useStyles.title} style={{flex:1}}>
+                            Tweetit
             </Typography>
                         <Button color="inherit" onClick={this.handleClickOpen} >Login</Button>
                         <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
@@ -77,6 +107,7 @@ export default class Header extends React.Component {
                                     label="username"
                                     type="text"
                                     fullWidth
+                                    onChange={this.textInputChanged_username} value={this.state.username}
                                 />
                                 <TextField
                                     autoFocus
@@ -85,19 +116,21 @@ export default class Header extends React.Component {
                                     label="password"
                                     type="password"
                                     fullWidth
+                                    onChange={this.textInputChanged_password} value={this.state.password}
                                 />
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={this.handleClose} color="primary">
                                     Cancel
           </Button>
-                                <Button onClick={this.handleClose} color="primary">
+                                <Button onClick={this.login} color="primary">
                                     Login
           </Button>
                             </DialogActions>
                         </Dialog>
                     </Toolbar>
                 </AppBar>
+                < Timeline tweet={this.state.tweet}></Timeline>
             </div>);
     }
 

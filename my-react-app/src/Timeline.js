@@ -2,43 +2,35 @@ import React from 'react';
 import './App.css';
 
 export default class Timeline extends React.Component {
-  //get put where
-  getTweet= async()=>{
-    const response= await fetch('https://getsuggestedfriends.azurewebsites.net/api/HttpTrigger', {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-type': 'application/json',
-        'username':'Jared'
-      }
-    });
-    const data = await response.json();
-    this.setState({items:data})
-    //this.state.items=data
-    console.log(this.state.items)
-  }
+  
+
   constructor(props) {
     console.log('Timeline Constructor ')
     super(props);
-    this.state = { items: []};
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = { tweet: this.props.tweet };
+    //this.handleChange = this.handleChange.bind(this);
+    //this.handleSubmit = this.handleSubmit.bind(this);
 
   }
 
-  componentDidMount(){
-    this.getTweet();  
-  }
+
   render() {
-    console.log(this.state.items);
+    
+    console.log("At timeline render",this.props.tweet)
+    if(this.props.tweet==undefined){
+      return null
+    }
+    else{
+    //this.getTweet()
     return (
       
       <ul>
-        {this.state.items.map(item =>
+        {this.props.tweet.map(item =>
           <li key={item.id}>{item}</li>
         )}
       </ul>
           );
+        }
       /*
       <div>
         <h3>TODO</h3>
@@ -52,10 +44,10 @@ export default class Timeline extends React.Component {
             value={this.state.text}
           />
           <button>
-            Add #{this.state.items.length + 1}
+            Add #{this.state.tweet.length + 1}
           </button>
         </form>
-        <TodoList items={this.state.items} />
+        <TodoList tweet={this.state.tweet} />
       </div>
       */
   }
@@ -87,7 +79,7 @@ export default class Timeline extends React.Component {
       id: Date.now()
     };
     this.setState(state => ({
-      items: state.items.concat(newItem),
+      tweet: state.tweet.concat(newItem),
       text: ''
     }));
     //POST TWEET 
@@ -112,7 +104,7 @@ class TodoList extends React.Component {
   render() {
     return (
       <ul>
-        {this.props.items.map(item => (
+        {this.props.tweet.map(item => (
           <li key={item.id}>{item.text}</li>
         ))}
       </ul>
