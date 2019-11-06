@@ -1,89 +1,92 @@
 import React from 'react';
 import './App.css';
+import { makeStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+
 
 export default class Timeline extends React.Component {
-  
-<<<<<<< HEAD
+
 
   constructor(props) {
     console.log('Timeline Constructor ')
     super(props);
     this.state = { tweet: this.props.tweet };
-=======
-  getTweet= async()=>{
-    console.log("getTweet")
-    const response= await fetch('https://getsuggestedfriends.azurewebsites.net/api/HttpTrigger', {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-type': 'application/json',
-        'username':this.props.username
-      }
-    });
-    const data = await response.json();
-    this.setState({tweet:data})
-    console.log(this.state.tweet)
-  }
-  constructor(props) {
-    console.log('Timeline Constructor ')
-    super(props);
-    this.state = { tweet: []};
->>>>>>> 0f77977510804dcc447e05cdec111c795ea04a66
     //this.handleChange = this.handleChange.bind(this);
     //this.handleSubmit = this.handleSubmit.bind(this);
 
   }
 
-<<<<<<< HEAD
+  useStyles = makeStyles(theme => ({
+    root: {
+      flexGrow: 1
+    },
+    paper: {
+      padding: theme.spacing(10),
+      textAlign: "center",
+      color: theme.palette.text.secondary
+    }
+  }));
 
   render() {
-    
-    console.log("At timeline render",this.props.tweet)
-    if(this.props.tweet==undefined){
+    let classes=this.useStyles;
+    console.log("At timeline render", this.props.tweet)
+    if (this.props.tweet == undefined) {
       return null
     }
-    else{
-=======
-  componentDidMount(){
-    //this.getTweet();  
-  }
-  render() {
-    
-    console.log("At timeline render",this.props.username)
->>>>>>> 0f77977510804dcc447e05cdec111c795ea04a66
-    //this.getTweet()
-    return (
-      
-      <ul>
-<<<<<<< HEAD
-        {this.props.tweet.map(item =>
-=======
-        {this.state.tweet.map(item =>
->>>>>>> 0f77977510804dcc447e05cdec111c795ea04a66
-          <li key={item.id}>{item}</li>
-        )}
-      </ul>
-          );
-        }
-      /*
-      <div>
-        <h3>TODO</h3>
-        <form onSubmit={this.handleSubmit}> 
-          <label htmlFor="new-todo">
-            Tweet
-          </label>
-          <input
-            id="new-todo"
-            onChange={this.handleChange}
-            value={this.state.text}
-          />
-          <button>
-            Add #{this.state.tweet.length + 1}
-          </button>
-        </form>
-        <TodoList tweet={this.state.tweet} />
-      </div>
-      */
+    else {
+      //this.getTweet()
+      return (
+        <div className={classes.root}>
+          <Grid container spacing={1}>
+            <Grid item xs={10}>
+            <Paper className={classes.paper}>
+            <Typography component="h2" variant="h6" color="primary" gutterBottom>
+            Your Timeline
+            </Typography>
+                <ul>
+                  {this.props.tweet.map(item =>
+                    <li key={item.id}>{item}</li>
+                  )}
+                </ul>
+              </Paper>
+
+
+            </Grid>
+            <Grid item xs={2}>
+              <Paper className={classes.paper}>
+              <Typography component="h2" variant="h6" color="primary" gutterBottom>
+                Suggested Friends
+                </Typography>
+                </Paper>
+            </Grid>
+
+          </Grid>
+        </div>
+
+
+      );
+    }
+    /*
+    <div>
+      <h3>TODO</h3>
+      <form onSubmit={this.handleSubmit}> 
+        <label htmlFor="new-todo">
+          Tweet
+        </label>
+        <input
+          id="new-todo"
+          onChange={this.handleChange}
+          value={this.state.text}
+        />
+        <button>
+          Add #{this.state.tweet.length + 1}
+        </button>
+      </form>
+      <TodoList tweet={this.state.tweet} />
+    </div>
+    */
   }
 
   handleChange(e) {
@@ -97,12 +100,12 @@ export default class Timeline extends React.Component {
       console.log('hi')
       //this.props.appActions.goToScreen('homepage', { transitionId: 'fadeIn' });
     }
-    else{
+    else {
       alert(res)
     }
   }
-  
-  
+
+
   handleSubmit(e) {
     e.preventDefault();
     if (!this.state.text.length) {
@@ -125,11 +128,11 @@ export default class Timeline extends React.Component {
       },
       body: JSON.stringify({
         name: "Jared",
-        tweet:this.state.text
+        tweet: this.state.text
       })
 
     })
-   .then((res) => this.processResponse(res))
+      .then((res) => this.processResponse(res))
   }
 }
 

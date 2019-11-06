@@ -13,6 +13,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Timeline from './Timeline';
+import UserProfile from './UserProfile'
 import './App.css';
 
 
@@ -31,6 +32,13 @@ export default class Header extends React.Component {
         });
         const data = await response.json();
         this.setState({tweet:data})
+        const status = await response.status;
+        if (status == 200){
+            console.log("ok")
+            this.setState({loggedIn:true});
+        }
+
+
         console.log(this.state.tweet)
       }
     //create User 
@@ -41,31 +49,27 @@ export default class Header extends React.Component {
             open: false,
             username: "",
             password: "",
-<<<<<<< HEAD
-            tweet:[]
-=======
-            usernametoChildComponent:"",
-            passwordtoChildComponent:""
->>>>>>> 0f77977510804dcc447e05cdec111c795ea04a66
+            tweet:[], 
+            loggedIn: false,
         };
     }
 
-    handleClickOpen = () => {
+    handleLogin = () => {
+        this.setState({loggedIn:false});
         this.setState({ open: true });
     };
 
-    handleClose = () => {
+    handleSingUp=() =>{
+        this.setState({loggedIn:false});
+        this.setState({ open: true });
+    }
+    closeDialog = () => {
         this.setState({ open: false });
     };
 
     login=()=>{
         this.setState({ open: false });
-<<<<<<< HEAD
         this.getTweet();
-=======
-        this.setState({ usernametoChildComponent: this.state.username });
-        console.log(this.state.usernametoChildComponent)
->>>>>>> 0f77977510804dcc447e05cdec111c795ea04a66
     }
 
     textInputChanged_username = (event) => {
@@ -100,15 +104,12 @@ export default class Header extends React.Component {
                         >
                             <MenuIcon />
                         </IconButton>
-<<<<<<< HEAD
                         <Typography variant="h6" className={this.useStyles.title} style={{flex:1}}>
-=======
-                        <Typography variant="h6" className={this.useStyles.title}>
->>>>>>> 0f77977510804dcc447e05cdec111c795ea04a66
                             Tweetit
             </Typography>
-                        <Button color="inherit" onClick={this.handleClickOpen} >Login</Button>
-                        <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+                        <Button color="inherit" onClick={this.handleLogin} >Login</Button>
+                        <Button color="inherit" onClick={this.handleSingUp} >Create User</Button>
+                        <Dialog open={this.state.open} onClose={this.closeDialog} aria-labelledby="form-dialog-title">
                             <DialogTitle id="form-dialog-title">Welcome to Tweetit</DialogTitle>
                             <DialogContent>
                                 <DialogContentText>
@@ -134,7 +135,7 @@ export default class Header extends React.Component {
                                 />
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={this.handleClose} color="primary">
+                                <Button onClick={this.closeDialog} color="primary">
                                     Cancel
           </Button>
                                 <Button onClick={this.login} color="primary">
@@ -144,11 +145,10 @@ export default class Header extends React.Component {
                         </Dialog>
                     </Toolbar>
                 </AppBar>
-<<<<<<< HEAD
-                < Timeline tweet={this.state.tweet}></Timeline>
-=======
-                < Timeline username={this.state.usernametoChildComponent}></Timeline>
->>>>>>> 0f77977510804dcc447e05cdec111c795ea04a66
+                { this.state.loggedIn ? <UserProfile  username={this.state.username} /> : null }
+
+                { this.state.loggedIn ? < Timeline tweet={this.state.tweet} /> : null }
+                
             </div>);
     }
 
