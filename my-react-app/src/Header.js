@@ -19,66 +19,69 @@ import './App.css';
 
 
 export default class Header extends React.Component {
-    //get put where
-    getTweet= async()=>{
-        console.log("getTweet")
-        const response= await fetch('https://getsuggestedfriends.azurewebsites.net/api/HttpTrigger', {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-type': 'application/json',
-            'username':this.props.username
-          }
-        });
-        const data = await response.json();
-        this.setState({tweet:data})
-        const status = await response.status;
-        if (status == 200){
-            console.log("ok")
-            this.setState({loggedIn:true});
-        }
 
-
-        console.log(this.state.tweet)
-      }
     //create User 
-
+    // tweet : AllTweets
     constructor(props) {
         super(props);
         this.state = {
             open: false,
             username: "",
             password: "",
-            tweet:[], 
+            tweet: [],
             loggedIn: false,
         };
     }
 
+    //get put where
+    getTweet = async () => {
+        console.log("getTweet")
+        const response = await fetch('https://getsuggestedfriends.azurewebsites.net/api/HttpTrigger', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-type': 'application/json',
+                'username': this.props.username
+            }
+        });
+        const data = await response.json();
+        this.setState({ tweet: data })
+        console.log(this.state.tweet.length)
+        const status = await response.status;
+        if (status == 200) {
+            console.log("ok")
+            this.setState({ loggedIn: true });
+            console.log(this.state.tweet.length)
+        }
+        console.log(this.state.tweet)
+    }
+
     handleLogin = () => {
-        this.setState({loggedIn:false});
+        this.setState({ loggedIn: false });
         this.setState({ open: true });
     };
 
-    handleSingUp=() =>{
-        this.setState({loggedIn:false});
+    handleSignUp = () => {
+        this.setState({ loggedIn: false });
         this.setState({ open: true });
     }
     closeDialog = () => {
         this.setState({ open: false });
     };
 
-    login=()=>{
+    login = () => {
         this.setState({ open: false });
+        console.log(this.state.open)
         this.getTweet();
     }
 
     textInputChanged_username = (event) => {
         this.setState({ username: event.target.value });
-      }
-    
+    }
+
     textInputChanged_password = (event) => {
         this.setState({ password: event.target.value });
-      }
+    }
     useStyles = makeStyles(theme => ({
         root: {
             flexGrow: 1
@@ -104,16 +107,16 @@ export default class Header extends React.Component {
                         >
                             <MenuIcon />
                         </IconButton>
-                        <Typography variant="h6" className={this.useStyles.title} style={{flex:1}}>
+                        <Typography variant="h6" className={this.useStyles.title} style={{ flex: 1 }}>
                             Tweetit
             </Typography>
                         <Button color="inherit" onClick={this.handleLogin} >Login</Button>
-                        <Button color="inherit" onClick={this.handleSingUp} >Create User</Button>
+                        <Button color="inherit" onClick={this.handleSignUp} >Create User</Button>
                         <Dialog open={this.state.open} onClose={this.closeDialog} aria-labelledby="form-dialog-title">
                             <DialogTitle id="form-dialog-title">Welcome to Tweetit</DialogTitle>
                             <DialogContent>
                                 <DialogContentText>
-                                  Login
+                                    Login
           </DialogContentText>
                                 <TextField
                                     autoFocus
@@ -145,10 +148,10 @@ export default class Header extends React.Component {
                         </Dialog>
                     </Toolbar>
                 </AppBar>
-                { this.state.loggedIn ? <UserProfile  username={this.state.username} /> : null }
+                {this.state.loggedIn ? <UserProfile username={this.state.username} /> : null}
 
-                { this.state.loggedIn ? < Timeline tweet={this.state.tweet} /> : null }
-                
+                {this.state.loggedIn ? < Timeline tweet={this.state.tweet} username ={this.state.username} /> : null}
+
             </div>);
     }
 

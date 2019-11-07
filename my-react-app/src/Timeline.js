@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+import Button from '@material-ui/core/Button';
 
 
 export default class Timeline extends React.Component {
@@ -15,9 +16,36 @@ export default class Timeline extends React.Component {
     this.state = { tweet: this.props.tweet };
     //this.handleChange = this.handleChange.bind(this);
     //this.handleSubmit = this.handleSubmit.bind(this);
-
+  }
+  
+    //get put where
+    follow = async (friend) => {
+      console.log("followFriends")
+      const response = await fetch('https://followuser.azurewebsites.net/api/HttpTrigger', {
+          method: 'POST',
+          headers: {
+              'Accept': 'application/json, text/plain, */*',
+              'Content-type': 'application/json',
+          },
+          
+          body: JSON.stringify({
+            name: this.state.username,
+            friend:friend
+          })
+      });
+      const status = await response.status;
+      if (status == 201) {
+          console.log("Followed Friends")
+      }
+      else{
+        console.log(response)
+      }
   }
 
+  handleFollow(friend){
+    console.log(friend)
+    this.follow(friend)
+  }
   useStyles = makeStyles(theme => ({
     root: {
       flexGrow: 1
@@ -26,6 +54,12 @@ export default class Timeline extends React.Component {
       padding: theme.spacing(10),
       textAlign: "center",
       color: theme.palette.text.secondary
+    },
+    button: {
+      margin: theme.spacing(1),
+    },
+    input: {
+      display: 'none',
     }
   }));
 
@@ -40,25 +74,31 @@ export default class Timeline extends React.Component {
       return (
         <div className={classes.root}>
           <Grid container spacing={1}>
-            <Grid item xs={10}>
+            <Grid item xs={8}>
             <Paper className={classes.paper}>
             <Typography component="h2" variant="h6" color="primary" gutterBottom>
             Your Timeline
             </Typography>
-                <ul>
-                  {this.props.tweet.map(item =>
-                    <li key={item.id}>{item}</li>
-                  )}
-                </ul>
               </Paper>
 
 
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={4}>
               <Paper className={classes.paper}>
               <Typography component="h2" variant="h6" color="primary" gutterBottom>
-                Suggested Friends
+                Suggested Friends ({this.props.tweet.length})
                 </Typography>
+                <ul>
+                <Typography component="h2" variant="body1" color="textPrimary">
+                  {this.props.tweet.map(item =>
+                    <li key={item.id}> {item}
+                          <Button variant="outlined" className={classes.button} onClick={() => this.handleFollow(item)} >
+        Follow
+      </Button>
+                    </li>
+                  )}
+                  </Typography>
+                </ul>
                 </Paper>
             </Grid>
 
