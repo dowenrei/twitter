@@ -32,6 +32,7 @@ export default class Friends extends React.Component {
         this.setState({ friends: data })
         const status = await response.status;
         if (status == 200) {
+            this.setState({ open: true });
             console.log("Received Friendlist");
         }
     }
@@ -50,6 +51,7 @@ export default class Friends extends React.Component {
         this.setState({ tweets: data })
         const status = await response.status;
         if (status == 200) {
+            this.setState({ openTweet: true });
             console.log("Received UserTweet");
         }
     }
@@ -58,6 +60,8 @@ export default class Friends extends React.Component {
     useStyles = makeStyles(theme => ({
         fab: {
             margin: theme.spacing(1),
+            alignItems: 'center',
+            justifyContent: 'center',
         },
         extendedIcon: {
             marginRight: theme.spacing(1),
@@ -66,12 +70,12 @@ export default class Friends extends React.Component {
     }));
 
     openFriendDialog = () => {
-        this.setState({ open: true });
+        
         this.getFriends();
     }
 
     openTweetDialog = () => {
-        this.setState({ openTweet: true });
+        
         this.getMyTweet();
     }
 
@@ -86,11 +90,11 @@ export default class Friends extends React.Component {
     render() {
         let classes = this.useStyles;
         return (
-            <div>
-                <Button variant="outlined" color="primary" onClick={this.openFriendDialog}>
+            <div mb={3}>
+                <Button variant="outlined" color="primary" onClick={this.openFriendDialog} style={{justifyContent: 'center'}}>
                     My Friendlist 
         </Button>
-                <Button variant="outlined" color="primary" onClick={this.openTweetDialog}>
+                <Button variant="outlined" color="primary" onClick={this.openTweetDialog} style={{justifyContent: 'center'}}>
                     My Tweets  
         </Button>
                 <Dialog

@@ -76,8 +76,8 @@ export default class Timeline extends React.Component {
       var numberOfFriends=this.props.SuggestedFriends.length;
       return (
         <div className={classes.root}>
-          <Grid container spacing={1}>
-            <Grid item xs={8}>
+          <Grid container spacing={1} >
+            <Grid item xs={5}>
             <Paper className={classes.paper}>
             <Typography component="h2" variant="h6" color="primary" gutterBottom>
             Your Timeline
@@ -85,7 +85,7 @@ export default class Timeline extends React.Component {
             <Typography component="h2" variant="body1" color="textPrimary">
                   
                   {this.props.timeline.map(item =>
-                    <li key={item.id}> {item.Username} says {item.Tweet}
+                    <li key={item.id}> {item.Username} tweeted {item.Tweet}
                       
                     </li>
                   )}
@@ -135,48 +135,7 @@ export default class Timeline extends React.Component {
     }
   }
 
-
-  handleSubmit(e) {
-    e.preventDefault();
-    if (!this.state.text.length) {
-      return;
-    }
-    const newItem = {
-      text: this.state.text,
-      id: Date.now()
-    };
-    this.setState(state => ({
-      SuggestedFriends: state.SuggestedFriends.concat(newItem),
-      text: ''
-    }));
-    //POST SuggestedFriends 
-    fetch('https://insertSuggestedFriends.azurewebsites.net/api/HttpTrigger', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: "Jared",
-        SuggestedFriends: this.state.text
-      })
-
-    })
-      .then((res) => this.processResponse(res))
-  }
 }
 
-class TodoList extends React.Component {
-
-  render() {
-    return (
-      <ul>
-        {this.props.SuggestedFriends.map(item => (
-          <li key={item.id}>{item.text}</li>
-        ))}
-      </ul>
-    );
-  }
-}
 
 

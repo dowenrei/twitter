@@ -26,8 +26,8 @@ export default class UserProfile extends React.Component {
   }
 
   postTweet = async () => {
-    console.log(this.props.username + " postTweet");
-    fetch('https://inserttweet.azurewebsites.net/api/HttpTrigger', {
+    console.log(this.props.username + " is posting Tweet..");
+    const response= await fetch('https://inserttweet.azurewebsites.net/api/HttpTrigger', {
       method: 'POST',
       headers: {
         'Accept': 'application/json, text/plain, */*',
@@ -37,17 +37,26 @@ export default class UserProfile extends React.Component {
         name: this.props.username,
         tweet: this.state.message
       })
-    }).then((res) => {
-      console.log(res)
-    })
-  }
+    });
+    const status = await response.status;
+    if(status ==201){
+      console.log(this.props.username + " posted Tweet "+this.state.message);
+      this.props.getTimeline();
+    }
+    else{
+      alert(response.statusText)
+    }
+    }
 
 
 
   useStyles = makeStyles(theme => ({
     fab: {
       margin: theme.spacing(1),
+      alignItems: 'center',
+      justifyContent: 'center',
     },
+
     extendedIcon: {
       marginRight: theme.spacing(1),
     },
@@ -80,7 +89,7 @@ export default class UserProfile extends React.Component {
         <Fab color="primary" aria-label="add" className={classes.fab} onClick={this.openDialog}>
           <AddIcon />
         </Fab>
-         
+        <Friends username={this.props.username} />
           <Dialog open={this.state.open} onClose={this.closeDialog} aria-labelledby="form-dialog-title"  >
             <DialogContent>
               <DialogContentText>

@@ -30,11 +30,11 @@ export default class Header extends React.Component {
             password: "",
             SuggestedFriends: [],
             loggedIn: false,
-            timeline:[]
+            timeline: []
         };
     }
 
-    
+
     getSuggestedFriends = async () => {
         console.log(this.state.username + " is getting SuggestedFriends")
         const response = await fetch('https://getsuggestedfriends.azurewebsites.net/api/HttpTrigger?', {
@@ -50,10 +50,10 @@ export default class Header extends React.Component {
         const status = await response.status;
         if (status == 200) {
             console.log("Successfully getting suggested friends")
-            this.setState({ loggedIn: true });
-            //console.log(this.state.SuggestedFriends.length)
         }
-        //console.log(this.state.SuggestedFriends)
+        else {
+            alert(response.statusText)
+        }
     }
 
     getTimeline = async () => {
@@ -67,16 +67,37 @@ export default class Header extends React.Component {
             }
         });
         const data = await response.json();
-        console.log(data)    
+        console.log(data)
         this.setState({ timeline: data })
         const status = await response.status;
         if (status == 200) {
-            console.log("Received Timeline"+ " of length " + this.state.timeline.length);
+            console.log("Received Timeline" + " of length " + this.state.timeline.length);
         }
-        
- 
-      }
-    
+    }
+
+    // createUser
+    createUser = async () => {
+        console.log("Creating user" + this.state.username )
+        const response = await fetch('https://createuserfinal.azurewebsites.net/api/ccreateUserFinal', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-type': 'application/json',
+            },
+
+            body: JSON.stringify({
+                name: this.state.username,
+                password: this.state.password
+            })
+        });
+        const status = await response.status;
+        if (status == 201) {
+            console.log("User" + this.state.username + "is created");
+        }
+        else {
+            alert(response.statusText)
+        }
+    }
 
     handleLogin = () => {
         this.setState({ loggedIn: false });
@@ -92,8 +113,13 @@ export default class Header extends React.Component {
     };
 
     login = () => {
+        if (this.state.username ===""){
+            alert('Insert Username')
+        }
+
         this.setState({ open: false });
-        console.log(this.state.open)
+        this.setState({ loggedIn: true });
+        this.createUser();
         this.getSuggestedFriends();
         this.getTimeline();
     }
@@ -133,8 +159,8 @@ export default class Header extends React.Component {
                         <Typography variant="h6" className={this.useStyles.title} style={{ flex: 1 }}>
                             Tweetit
             </Typography>
-                        <Button color="inherit" onClick={this.handleLogin} >Login</Button>
-                        <Button color="inherit" onClick={this.handleSignUp} >Create User</Button>
+                        <Button color="inherit" onClick={this.handleLogin} > Create User </Button>
+                        {/* <Button color="inherit" onClick={this.handleSignUp} >Create User</Button> */}
                         <Dialog open={this.state.open} onClose={this.closeDialog} aria-labelledby="form-dialog-title">
                             <DialogTitle id="form-dialog-title">Welcome to Tweetit</DialogTitle>
                             <DialogContent>
@@ -171,10 +197,9 @@ export default class Header extends React.Component {
                         </Dialog>
                     </Toolbar>
                 </AppBar>
-                {this.state.loggedIn ? <UserProfile username={this.state.username} /> : null}
+                { (this.state.loggedIn && this.state.username !="") ? <UserProfile username={this.state.username} getTimeline={this.getTimeline} /> : null}
+                { (this.state.loggedIn && this.state.username !="") ? < Timeline SuggestedFriends={this.state.SuggestedFriends} username={this.state.username} timeline={this.state.timeline} /> : null}
 
-                {this.state.loggedIn ? < Timeline SuggestedFriends={this.state.SuggestedFriends} username ={this.state.username} timeline={this.state.timeline} /> : null}
-                
             </div>);
     }
 
