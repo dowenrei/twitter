@@ -13,12 +13,12 @@ export default class Timeline extends React.Component {
   constructor(props) {
     console.log('Timeline Constructor ')
     super(props);
-    this.state = { tweet: this.props.tweet };
+    this.state = { SuggestedFriends: this.props.SuggestedFriends };
     //this.handleChange = this.handleChange.bind(this);
     //this.handleSubmit = this.handleSubmit.bind(this);
   }
   
-    //get put where
+    // followUser
     follow = async (friend) => {
       console.log("followFriends")
       const response = await fetch('https://followuser.azurewebsites.net/api/HttpTrigger', {
@@ -65,12 +65,12 @@ export default class Timeline extends React.Component {
 
   render() {
     let classes=this.useStyles;
-    console.log("At timeline render", this.props.tweet)
-    if (this.props.tweet == undefined) {
+    console.log("At timeline render", this.props.SuggestedFriends)
+    if (this.props.SuggestedFriends == undefined) {
       return null
     }
     else {
-      //this.getTweet()
+      //this.getSuggestedFriends()
       return (
         <div className={classes.root}>
           <Grid container spacing={1}>
@@ -86,11 +86,11 @@ export default class Timeline extends React.Component {
             <Grid item xs={4}>
               <Paper className={classes.paper}>
               <Typography component="h2" variant="h6" color="primary" gutterBottom>
-                Suggested Friends ({this.props.tweet.length})
+                Suggested Friends ({this.props.SuggestedFriends.length})
                 </Typography>
                 <ul>
                 <Typography component="h2" variant="body1" color="textPrimary">
-                  {this.props.tweet.map(item =>
+                  {this.props.SuggestedFriends.map(item =>
                     <li key={item.id}> {item}
                           <Button variant="outlined" className={classes.button} onClick={() => this.handleFollow(item)} >
         Follow
@@ -113,7 +113,7 @@ export default class Timeline extends React.Component {
       <h3>TODO</h3>
       <form onSubmit={this.handleSubmit}> 
         <label htmlFor="new-todo">
-          Tweet
+          SuggestedFriends
         </label>
         <input
           id="new-todo"
@@ -121,10 +121,10 @@ export default class Timeline extends React.Component {
           value={this.state.text}
         />
         <button>
-          Add #{this.state.tweet.length + 1}
+          Add #{this.state.SuggestedFriends.length + 1}
         </button>
       </form>
-      <TodoList tweet={this.state.tweet} />
+      <TodoList SuggestedFriends={this.state.SuggestedFriends} />
     </div>
     */
   }
@@ -156,11 +156,11 @@ export default class Timeline extends React.Component {
       id: Date.now()
     };
     this.setState(state => ({
-      tweet: state.tweet.concat(newItem),
+      SuggestedFriends: state.SuggestedFriends.concat(newItem),
       text: ''
     }));
-    //POST TWEET 
-    fetch('https://inserttweet.azurewebsites.net/api/HttpTrigger', {
+    //POST SuggestedFriends 
+    fetch('https://insertSuggestedFriends.azurewebsites.net/api/HttpTrigger', {
       method: 'POST',
       headers: {
         'Accept': 'application/json, text/plain, */*',
@@ -168,7 +168,7 @@ export default class Timeline extends React.Component {
       },
       body: JSON.stringify({
         name: "Jared",
-        tweet: this.state.text
+        SuggestedFriends: this.state.text
       })
 
     })
@@ -181,7 +181,7 @@ class TodoList extends React.Component {
   render() {
     return (
       <ul>
-        {this.props.tweet.map(item => (
+        {this.props.SuggestedFriends.map(item => (
           <li key={item.id}>{item.text}</li>
         ))}
       </ul>

@@ -21,21 +21,21 @@ import './App.css';
 export default class Header extends React.Component {
 
     //create User 
-    // tweet : AllTweets
+    // SuggestedFriends : AllSuggestedFriendss
     constructor(props) {
         super(props);
         this.state = {
             open: false,
             username: "",
             password: "",
-            tweet: [],
+            SuggestedFriends: [],
             loggedIn: false,
         };
     }
 
     //get put where
-    getTweet = async () => {
-        console.log("getTweet")
+    getSuggestedFriends = async () => {
+        console.log("getSuggestedFriends")
         const response = await fetch('https://getsuggestedfriends.azurewebsites.net/api/HttpTrigger', {
             method: 'GET',
             headers: {
@@ -45,15 +45,15 @@ export default class Header extends React.Component {
             }
         });
         const data = await response.json();
-        this.setState({ tweet: data })
-        console.log(this.state.tweet.length)
+        this.setState({ SuggestedFriends: data })
+        console.log(this.state.SuggestedFriends.length)
         const status = await response.status;
         if (status == 200) {
             console.log("ok")
             this.setState({ loggedIn: true });
-            console.log(this.state.tweet.length)
+            console.log(this.state.SuggestedFriends.length)
         }
-        console.log(this.state.tweet)
+        console.log(this.state.SuggestedFriends)
     }
 
     handleLogin = () => {
@@ -72,7 +72,7 @@ export default class Header extends React.Component {
     login = () => {
         this.setState({ open: false });
         console.log(this.state.open)
-        this.getTweet();
+        this.getSuggestedFriends();
     }
 
     textInputChanged_username = (event) => {
@@ -150,7 +150,7 @@ export default class Header extends React.Component {
                 </AppBar>
                 {this.state.loggedIn ? <UserProfile username={this.state.username} /> : null}
 
-                {this.state.loggedIn ? < Timeline tweet={this.state.tweet} username ={this.state.username} /> : null}
+                {this.state.loggedIn ? < Timeline SuggestedFriends={this.state.SuggestedFriends} username ={this.state.username} /> : null}
 
             </div>);
     }
