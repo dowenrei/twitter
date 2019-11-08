@@ -80,7 +80,7 @@ export default class UserProfile extends React.Component {
         <Fab color="primary" aria-label="add" className={classes.fab} onClick={this.openDialog}>
           <AddIcon />
         </Fab>
-        <Friends username={this.props.username} />
+         
           <Dialog open={this.state.open} onClose={this.closeDialog} aria-labelledby="form-dialog-title"  >
             <DialogContent>
               <DialogContentText>

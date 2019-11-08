@@ -30,31 +30,53 @@ export default class Header extends React.Component {
             password: "",
             SuggestedFriends: [],
             loggedIn: false,
+            timeline:[]
         };
     }
 
-    //get put where
+    
     getSuggestedFriends = async () => {
-        console.log("getSuggestedFriends")
-        const response = await fetch('https://getsuggestedfriends.azurewebsites.net/api/HttpTrigger', {
+        console.log(this.state.username + " is getting SuggestedFriends")
+        const response = await fetch('https://getsuggestedfriends.azurewebsites.net/api/HttpTrigger?', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-type': 'application/json',
-                'username': this.props.username
+                'username': this.state.username
             }
         });
         const data = await response.json();
         this.setState({ SuggestedFriends: data })
-        console.log(this.state.SuggestedFriends.length)
         const status = await response.status;
         if (status == 200) {
-            console.log("ok")
+            console.log("Successfully getting suggested friends")
             this.setState({ loggedIn: true });
-            console.log(this.state.SuggestedFriends.length)
+            //console.log(this.state.SuggestedFriends.length)
         }
-        console.log(this.state.SuggestedFriends)
+        //console.log(this.state.SuggestedFriends)
     }
+
+    getTimeline = async () => {
+        console.log("Getting Timeline of " + this.state.username);
+        const response = await fetch('https://getalltweets.azurewebsites.net/api/AllTweets', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-type': 'application/json',
+                'username': this.state.username
+            }
+        });
+        const data = await response.json();
+        console.log(data)    
+        this.setState({ timeline: data })
+        const status = await response.status;
+        if (status == 200) {
+            console.log("Received Timeline"+ " of length " + this.state.timeline.length);
+        }
+        
+ 
+      }
+    
 
     handleLogin = () => {
         this.setState({ loggedIn: false });
@@ -73,6 +95,7 @@ export default class Header extends React.Component {
         this.setState({ open: false });
         console.log(this.state.open)
         this.getSuggestedFriends();
+        this.getTimeline();
     }
 
     textInputChanged_username = (event) => {
@@ -150,8 +173,8 @@ export default class Header extends React.Component {
                 </AppBar>
                 {this.state.loggedIn ? <UserProfile username={this.state.username} /> : null}
 
-                {this.state.loggedIn ? < Timeline SuggestedFriends={this.state.SuggestedFriends} username ={this.state.username} /> : null}
-
+                {this.state.loggedIn ? < Timeline SuggestedFriends={this.state.SuggestedFriends} username ={this.state.username} timeline={this.state.timeline} /> : null}
+                
             </div>);
     }
 

@@ -13,14 +13,14 @@ export default class Timeline extends React.Component {
   constructor(props) {
     console.log('Timeline Constructor ')
     super(props);
-    this.state = { SuggestedFriends: this.props.SuggestedFriends };
-    //this.handleChange = this.handleChange.bind(this);
-    //this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = {
+      buttonText : "Follow"
+    }
   }
   
     // followUser
     follow = async (friend) => {
-      console.log("followFriends")
+      console.log(this.props.username + " wants to follow " + friend)
       const response = await fetch('https://followuser.azurewebsites.net/api/HttpTrigger', {
           method: 'POST',
           headers: {
@@ -29,21 +29,23 @@ export default class Timeline extends React.Component {
           },
           
           body: JSON.stringify({
-            name: this.state.username,
+            name: this.props.username,
             friend:friend
           })
       });
       const status = await response.status;
       if (status == 201) {
-          console.log("Followed Friends")
+          //this.setState({buttonText:"Followed"});
+          console.log("Followed Friends");
       }
       else{
-        console.log(response)
+        alert(response.statusText)
       }
   }
 
-  handleFollow(friend){
-    console.log(friend)
+
+  handleFollow(friend,index){
+    console.log(friend,index)
     this.follow(friend)
   }
   useStyles = makeStyles(theme => ({
@@ -65,12 +67,13 @@ export default class Timeline extends React.Component {
 
   render() {
     let classes=this.useStyles;
-    console.log("At timeline render", this.props.SuggestedFriends)
-    if (this.props.SuggestedFriends == undefined) {
+    //console.log("At timeline render", this.props.SuggestedFriends)
+    if (this.props.SuggestedFriends == undefined && this.props.timeline == undefined) {
       return null
     }
     else {
-      //this.getSuggestedFriends()
+      console.log(this.props.timeline)
+      var numberOfFriends=this.props.SuggestedFriends.length;
       return (
         <div className={classes.root}>
           <Grid container spacing={1}>
@@ -79,6 +82,14 @@ export default class Timeline extends React.Component {
             <Typography component="h2" variant="h6" color="primary" gutterBottom>
             Your Timeline
             </Typography>
+            <Typography component="h2" variant="body1" color="textPrimary">
+                  
+                  {this.props.timeline.map(item =>
+                    <li key={item.id}> {item.Username} says {item.Tweet}
+                      
+                    </li>
+                  )}
+                  </Typography>
               </Paper>
 
 
@@ -90,10 +101,10 @@ export default class Timeline extends React.Component {
                 </Typography>
                 <ul>
                 <Typography component="h2" variant="body1" color="textPrimary">
-                  {this.props.SuggestedFriends.map(item =>
-                    <li key={item.id}> {item}
-                          <Button variant="outlined" className={classes.button} onClick={() => this.handleFollow(item)} >
-        Follow
+                  {this.props.SuggestedFriends.map((item,index) =>
+                    <li key={index}> {item} {item.id}
+                          <Button variant="outlined" disabled={false} className={classes.button} onClick={() => this.handleFollow(item,index)} >
+        {this.state.buttonText}
       </Button>
                     </li>
                   )}
@@ -108,25 +119,6 @@ export default class Timeline extends React.Component {
 
       );
     }
-    /*
-    <div>
-      <h3>TODO</h3>
-      <form onSubmit={this.handleSubmit}> 
-        <label htmlFor="new-todo">
-          SuggestedFriends
-        </label>
-        <input
-          id="new-todo"
-          onChange={this.handleChange}
-          value={this.state.text}
-        />
-        <button>
-          Add #{this.state.SuggestedFriends.length + 1}
-        </button>
-      </form>
-      <TodoList SuggestedFriends={this.state.SuggestedFriends} />
-    </div>
-    */
   }
 
   handleChange(e) {
@@ -136,9 +128,7 @@ export default class Timeline extends React.Component {
   processResponse(res) {
     console.log(res)
     if (res.status == 201) {
-      // do what?
       console.log('hi')
-      //this.props.appActions.goToScreen('homepage', { transitionId: 'fadeIn' });
     }
     else {
       alert(res)
