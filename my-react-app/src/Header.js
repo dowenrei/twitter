@@ -21,7 +21,6 @@ import './App.css';
 export default class Header extends React.Component {
 
     //create User 
-    // SuggestedFriends : AllSuggestedFriendss
     constructor(props) {
         super(props);
         this.state = {
@@ -201,7 +200,7 @@ export default class Header extends React.Component {
                     </Toolbar>
                 </AppBar>
                 { (this.state.loggedIn && this.state.username !="") ? <UserProfile username={this.state.username} getTimeline={this.getTimeline} /> : null}
-                { (this.state.loggedIn && this.state.username !="") ? < Timeline SuggestedFriends={this.state.SuggestedFriends} username={this.state.username} timeline={this.state.timeline} /> : null}
+                { (this.state.loggedIn && this.state.username !="") ? < Timeline SuggestedFriends={this.state.SuggestedFriends} username={this.state.username} timeline={this.state.timeline}  getTimeline={this.getTimeline} /> : null}
 
             </div>);
     }

@@ -59,7 +59,7 @@ export default class Timeline extends React.Component {
   };
   
   handleFollow(friend,index){
-    console.log(friend,index)
+  //  console.log(friend,index)
     this.follow(friend)
   }
   useStyles = makeStyles(theme => ({
@@ -86,11 +86,11 @@ export default class Timeline extends React.Component {
       return null
     }
     else {
-      console.log(this.props.timeline)
+      //console.log(this.props.timeline)
       var numberOfFriends=this.props.SuggestedFriends.length;
       return (
         <div className={classes.root}>
-          <Grid container spacing={1}  >
+          <Grid container spacing={1} style={{paddingLeft:'10px'}} >
             <Grid item xs={6}>
             <Typography component="h2" variant="h6" color="primary" gutterBottom>
             Your Timeline
@@ -98,7 +98,7 @@ export default class Timeline extends React.Component {
             <Typography component="h2" variant="body1" color="textPrimary">
                   
                   {this.props.timeline.map(item =>
-                    <li key={item.id}> {item.Username} tweeted {item.Tweet}
+                    <li key={item.id}> {item.Username} :" {item.Tweet} ".
                       
                     </li>
                   )}
