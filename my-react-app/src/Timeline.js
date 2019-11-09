@@ -5,7 +5,10 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
-
+import { Container } from '@material-ui/core';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 
 export default class Timeline extends React.Component {
 
@@ -14,7 +17,9 @@ export default class Timeline extends React.Component {
     console.log('Timeline Constructor ')
     super(props);
     this.state = {
-      buttonText : "Follow"
+      buttonText:'Follow',
+      open:false,
+      friend:''
     }
   }
   
@@ -35,15 +40,24 @@ export default class Timeline extends React.Component {
       });
       const status = await response.status;
       if (status == 201) {
-          //this.setState({buttonText:"Followed"});
+          this.openDialog();
+          this.setState({friend:friend});
           console.log("Followed Friends");
+          
       }
       else{
         alert(response.statusText)
       }
   }
 
+  openDialog = () => {
+    this.setState({ open: true });
+  }
 
+  closeDialog = () => {
+    this.setState({ open: false });
+  };
+  
   handleFollow(friend,index){
     console.log(friend,index)
     this.follow(friend)
@@ -76,9 +90,9 @@ export default class Timeline extends React.Component {
       var numberOfFriends=this.props.SuggestedFriends.length;
       return (
         <div className={classes.root}>
-          <Grid container spacing={1} >
-            <Grid item xs={5}>
-            <Paper className={classes.paper}>
+          <Grid container spacing={1}  >
+            <Grid item xs={6}>
+            <Paper className={classes.paper} style={{width:'400px'}}>
             <Typography component="h2" variant="h6" color="primary" gutterBottom>
             Your Timeline
             </Typography>
@@ -94,13 +108,13 @@ export default class Timeline extends React.Component {
 
 
             </Grid>
-            <Grid item xs={4}>
-              <Paper className={classes.paper}>
-              <Typography component="h2" variant="h6" color="primary" gutterBottom>
+            <Grid item xs={6} style={{width:'200px'}}>
+              <Paper className={classes.paper} style={{width:'200px'}} >
+              <Typography component="h2" variant="h6" color="primary" gutterBottom style={{width:'200px'}}>
                 Suggested Friends ({this.props.SuggestedFriends.length})
                 </Typography>
                 <ul>
-                <Typography component="h2" variant="body1" color="textPrimary">
+                <Typography component="h2" variant="body1" color="textPrimary" style={{width:'200px'}}>
                   {this.props.SuggestedFriends.map((item,index) =>
                     <li key={index}> {item} {item.id}
                           <Button variant="outlined" disabled={false} className={classes.button} onClick={() => this.handleFollow(item,index)} >
@@ -114,6 +128,18 @@ export default class Timeline extends React.Component {
             </Grid>
 
           </Grid>
+          <Dialog
+                    open={this.state.open}
+                    onClose={this.closeDialog}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                          {this.props.username} successfully follows {this.state.friend}.
+                        </DialogContentText>
+                    </DialogContent>
+                </Dialog>
         </div>
 
 

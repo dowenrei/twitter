@@ -27,7 +27,6 @@ export default class Header extends React.Component {
         this.state = {
             open: false,
             username: "",
-            password: "",
             SuggestedFriends: [],
             loggedIn: false,
             timeline: []
@@ -87,12 +86,13 @@ export default class Header extends React.Component {
 
             body: JSON.stringify({
                 name: this.state.username,
-                password: this.state.password
+                password: "empty"
             })
         });
         const status = await response.status;
         if (status == 201) {
             console.log("User" + this.state.username + "is created");
+            this.setState({ loggedIn: true });
         }
         else {
             alert(response.statusText)
@@ -118,7 +118,6 @@ export default class Header extends React.Component {
         }
 
         this.setState({ open: false });
-        this.setState({ loggedIn: true });
         this.createUser();
         this.getSuggestedFriends();
         this.getTimeline();
@@ -127,10 +126,12 @@ export default class Header extends React.Component {
     textInputChanged_username = (event) => {
         this.setState({ username: event.target.value });
     }
-
+    /*
     textInputChanged_password = (event) => {
         this.setState({ password: event.target.value });
     }
+    */
+
     useStyles = makeStyles(theme => ({
         root: {
             flexGrow: 1
@@ -176,6 +177,7 @@ export default class Header extends React.Component {
                                     fullWidth
                                     onChange={this.textInputChanged_username} value={this.state.username}
                                 />
+                                {/* 
                                 <TextField
                                     autoFocus
                                     margin="dense"
@@ -185,6 +187,7 @@ export default class Header extends React.Component {
                                     fullWidth
                                     onChange={this.textInputChanged_password} value={this.state.password}
                                 />
+                                */}
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={this.closeDialog} color="primary">

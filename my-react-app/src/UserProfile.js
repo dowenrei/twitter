@@ -1,8 +1,6 @@
 import React from 'react';
 import './App.css';
 import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
@@ -10,10 +8,10 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import Button from "@material-ui/core/Button";
 import Friends from "./friends"
+import { Container } from '@material-ui/core';
 // do tweet button 
 export default class UserProfile extends React.Component {
   constructor(props) {
@@ -40,7 +38,7 @@ export default class UserProfile extends React.Component {
     });
     const status = await response.status;
     if(status ==201){
-      console.log(this.props.username + " posted Tweet "+this.state.message);
+      console.log(this.props.username + " : ' "+ this.state.message + ".' ");
       this.props.getTimeline();
     }
     else{
@@ -83,13 +81,15 @@ export default class UserProfile extends React.Component {
     return (
       <div>
 
-        <Typography component="h2" variant="h6" color="primary" gutterBottom>
-          Welcome {this.props.username}!
+        <Typography component="h2" variant="h6" color="primary" gutterBottom align="center" style={{marginTop: '20px'}}>
+          Welcome {this.props.username}, Start Tweeting now!
       </Typography>
-        <Fab color="primary" aria-label="add" className={classes.fab} onClick={this.openDialog}>
-          <AddIcon />
+        <Container maxWidth="sm" align="center">
+        <Fab color="primary" aria-label="add" className={classes.fab} onClick={this.openDialog}  style={{marginBottom: '20px'}}>
+          <AddIcon /> 
         </Fab>
         <Friends username={this.props.username} />
+        </Container>
           <Dialog open={this.state.open} onClose={this.closeDialog} aria-labelledby="form-dialog-title"  >
             <DialogContent>
               <DialogContentText>

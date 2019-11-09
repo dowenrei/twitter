@@ -58,14 +58,11 @@ export default class Friends extends React.Component {
 
 
     useStyles = makeStyles(theme => ({
-        fab: {
-            margin: theme.spacing(1),
-            alignItems: 'center',
-            justifyContent: 'center',
+        buttonContent: {
+            marginTop: theme.spacing(4),
+        
         },
-        extendedIcon: {
-            marginRight: theme.spacing(1),
-        },
+    
 
     }));
 
@@ -90,11 +87,11 @@ export default class Friends extends React.Component {
     render() {
         let classes = this.useStyles;
         return (
-            <div mb={3}>
-                <Button variant="outlined" color="primary" onClick={this.openFriendDialog} style={{justifyContent: 'center'}}>
+            <div className={classes.buttonContent} >
+                <Button variant="outlined" color="primary" onClick={this.openFriendDialog} style={{marginBottom: '20px', marginRight:'20px', marginTop:'20px'}}>
                     My Friendlist 
         </Button>
-                <Button variant="outlined" color="primary" onClick={this.openTweetDialog} style={{justifyContent: 'center'}}>
+                <Button variant="outlined" color="primary" onClick={this.openTweetDialog} style={{marginBottom: '20px', marginTop:'20px'}}>
                     My Tweets  
         </Button>
                 <Dialog
