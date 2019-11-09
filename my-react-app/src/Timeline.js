@@ -43,7 +43,7 @@ export default class Timeline extends React.Component {
           this.openDialog();
           this.setState({friend:friend});
           console.log("Followed Friends");
-          
+          this.props.getTimeline();
       }
       else{
         alert(response.statusText)
