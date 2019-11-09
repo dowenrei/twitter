@@ -92,7 +92,6 @@ export default class Timeline extends React.Component {
         <div className={classes.root}>
           <Grid container spacing={1}  >
             <Grid item xs={6}>
-            <Paper className={classes.paper} style={{width:'400px'}}>
             <Typography component="h2" variant="h6" color="primary" gutterBottom>
             Your Timeline
             </Typography>
@@ -104,19 +103,18 @@ export default class Timeline extends React.Component {
                     </li>
                   )}
                   </Typography>
-              </Paper>
+
 
 
             </Grid>
-            <Grid item xs={6} style={{width:'200px'}}>
-              <Paper className={classes.paper} style={{width:'200px'}} >
-              <Typography component="h2" variant="h6" color="primary" gutterBottom style={{width:'200px'}}>
+            <Grid item xs={6} style={{width:'300px'}}>
+              <Typography component="h2" variant="h6" color="primary" gutterBottom style={{width:'300px'}}>
                 Suggested Friends ({this.props.SuggestedFriends.length})
                 </Typography>
                 <ul>
                 <Typography component="h2" variant="body1" color="textPrimary" style={{width:'200px'}}>
                   {this.props.SuggestedFriends.map((item,index) =>
-                    <li key={index}> {item} {item.id}
+                    <li key={index} style={{width:'300px'}} > {item} {item.id}
                           <Button variant="outlined" disabled={false} className={classes.button} onClick={() => this.handleFollow(item,index)} >
         {this.state.buttonText}
       </Button>
@@ -124,7 +122,6 @@ export default class Timeline extends React.Component {
                   )}
                   </Typography>
                 </ul>
-                </Paper>
             </Grid>
 
           </Grid>
