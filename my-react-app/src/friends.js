@@ -20,7 +20,7 @@ export default class Friends extends React.Component {
 
     getFriends = async () => {
         console.log("GettingFriends of " + this.props.username);
-        const response = await fetch('https://showfriendlist.azurewebsites.net/api/HttpTrigger', {
+        const response = await fetch('https://tweetit1011.azurewebsites.net/api/getFriend', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
@@ -39,7 +39,7 @@ export default class Friends extends React.Component {
 
     getMyTweet = async () => {
         console.log("Getting Tweets of " + this.props.username);
-        const response = await fetch('https://getusertweets.azurewebsites.net/api/getUserTweets', {
+        const response = await fetch('https://tweetit1011.azurewebsites.net/api/getUserTweets', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',

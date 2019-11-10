@@ -35,7 +35,7 @@ export default class Header extends React.Component {
 
     getSuggestedFriends = async () => {
         console.log(this.state.username + " is getting SuggestedFriends")
-        const response = await fetch('https://getsuggestedfriends.azurewebsites.net/api/HttpTrigger?', {
+        const response = await fetch('https://tweetit1011.azurewebsites.net/api/getSuggestedFriends', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
@@ -43,6 +43,7 @@ export default class Header extends React.Component {
                 'username': this.state.username
             }
         });
+        
         const data = await response.json();
         this.setState({ SuggestedFriends: data })
         const status = await response.status;
@@ -56,7 +57,7 @@ export default class Header extends React.Component {
 
     getTimeline = async () => {
         console.log("Getting Timeline of " + this.state.username);
-        const response = await fetch('https://getalltweets.azurewebsites.net/api/AllTweets', {
+        const response = await fetch('https://tweetit1011.azurewebsites.net/api/getAllTweets', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
@@ -64,6 +65,7 @@ export default class Header extends React.Component {
                 'username': this.state.username
             }
         });
+        
         const data = await response.json();
         console.log(data)
         this.setState({ timeline: data })
@@ -76,7 +78,7 @@ export default class Header extends React.Component {
     // createUser
     createUser = async () => {
         console.log("Creating user" + this.state.username )
-        const response = await fetch('https://createuserfinal.azurewebsites.net/api/ccreateUserFinal', {
+        const response = await fetch('https://tweetit1011.azurewebsites.net/api/ccreateUserFinal', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain, */*',

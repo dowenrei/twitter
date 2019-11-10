@@ -26,7 +26,7 @@ export default class Timeline extends React.Component {
     // followUser
     follow = async (friend) => {
       console.log(this.props.username + " wants to follow " + friend)
-      const response = await fetch('https://followuser.azurewebsites.net/api/HttpTrigger', {
+      const response = await fetch('https://tweetit1011.azurewebsites.net/api/followUser', {
           method: 'POST',
           headers: {
               'Accept': 'application/json, text/plain, */*',

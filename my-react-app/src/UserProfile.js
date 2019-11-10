@@ -25,7 +25,7 @@ export default class UserProfile extends React.Component {
 
   postTweet = async () => {
     console.log(this.props.username + " is posting Tweet..");
-    const response= await fetch('https://inserttweet.azurewebsites.net/api/HttpTrigger', {
+    const response= await fetch('https://tweetit1011.azurewebsites.net/api/insertTweet', {
       method: 'POST',
       headers: {
         'Accept': 'application/json, text/plain, */*',
