@@ -13,8 +13,10 @@ export default class Friends extends React.Component {
         this.state = {
             open: false,
             openTweet: false,
+            openFollowers:false,
             friends: [],
-            tweets: []
+            tweets: [],
+            followers:[]
         };
     }
 
@@ -36,6 +38,26 @@ export default class Friends extends React.Component {
             console.log("Received Friendlist");
         }
     }
+
+    getFollowers = async () => {
+        console.log("Getting Followers of " + this.props.username);
+        const response = await fetch('https://tweetit1011.azurewebsites.net/api/followers', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-type': 'application/json',
+                'username': this.props.username
+            }
+        });
+        const data = await response.json();
+        this.setState({ followers: data })
+        const status = await response.status;
+        if (status == 200) {
+            this.setState({ openFollowers: true });
+            console.log("Received Followers");
+        }
+    }
+
 
     getMyTweet = async () => {
         console.log("Getting Tweets of " + this.props.username);
@@ -76,6 +98,10 @@ export default class Friends extends React.Component {
         this.getMyTweet();
     }
 
+    openFollowersDialog = () => {
+        
+        this.getFollowers();
+    }
 
     closeDialog = () => {
         this.setState({ open: false });
@@ -84,6 +110,10 @@ export default class Friends extends React.Component {
     closeTweetDialog = () => {
         this.setState({ openTweet: false });
     };
+
+    closeFollowersDialog = () => {
+        this.setState({ openFollowers: false });
+    };
     render() {
         let classes = this.useStyles;
         return (
@@ -91,8 +121,11 @@ export default class Friends extends React.Component {
                 <Button variant="outlined" color="primary" onClick={this.openFriendDialog} style={{marginBottom: '20px', marginRight:'20px', marginTop:'20px'}}>
                     My Friendlist 
         </Button>
-                <Button variant="outlined" color="primary" onClick={this.openTweetDialog} style={{marginBottom: '20px', marginTop:'20px'}}>
+                <Button variant="outlined" color="primary" onClick={this.openTweetDialog} style={{marginBottom: '20px', marginTop:'20px',  marginRight:'20px'}}>
                     My Tweets  
+        </Button>
+                <Button variant="outlined" color="primary" onClick={this.openFollowersDialog} style={{marginBottom: '20px', marginTop:'20px'}}>
+                    My Followers  
         </Button>
                 <Dialog
                     open={this.state.open}
@@ -133,6 +166,28 @@ export default class Friends extends React.Component {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.closeTweetDialog} color="primary" autoFocus>
+                            ok
+            </Button>
+                    </DialogActions>
+                </Dialog>
+
+                <Dialog
+                    open={this.state.openFollowers}
+                    onClose={this.closeFollowersDialog}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Your Followers"} [{this.state.followers.length}] </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            {this.state.followers.map(item =>
+                                <li key={item.id}> {item}
+                                </li>
+                            )}
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.closeFollowersDialog} color="primary" autoFocus>
                             ok
             </Button>
                     </DialogActions>
